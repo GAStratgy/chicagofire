@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Grey Area Strategy | Chicago Fire FC Proposal</title>
+<style>
+  :root{
+    --navy:#080c17; --dark:#0b1020; --card:#101623; --card2:#131a28;
+    --blue:#1a5fc4; --blue-mid:#2470d8; --gold:#c9a84c; --gold-lt:#e8c96e;
+    --white:#eef2ff; --muted:#7a88a8; --border:rgba(255,255,255,0.07);
+    --glow-gold:rgba(201,168,76,0.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--navy);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  #app{max-width:720px;margin:0 auto;overflow-x:hidden;}
+  body{overflow-x:hidden;}
+  .success-context, .contact-link, .seq-body, .vsp-stat .l, .step-desc{overflow-wrap:anywhere;}
+
+  .home{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:56px 24px;
+    background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,95,196,0.2) 0%, transparent 70%),linear-gradient(180deg,#0a0f1e 0%,#060910 100%);}
+  .home-eyebrow{font-size:11px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-bottom:22px;}
+  .home h1{font-size:clamp(28px,8vw,46px);font-weight:800;line-height:1.1;letter-spacing:-0.5px;margin-bottom:14px;}
+  .home h1 em{font-style:normal;color:var(--gold-lt);}
+  .home-sub{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:40px;max-width:460px;}
+  .choose{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px;}
+  .path{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 22px;margin-bottom:16px;cursor:pointer;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;}
+  .path:active{transform:scale(.985);}
+  .path:hover{border-color:rgba(201,168,76,0.4);box-shadow:0 0 30px var(--glow-gold);}
+  .path-num{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue-mid);margin-bottom:8px;}
+  .path h3{font-size:21px;font-weight:800;color:var(--white);margin-bottom:6px;}
+  .path p{font-size:14px;color:var(--muted);line-height:1.5;}
+  .path .go{margin-top:14px;font-size:13px;font-weight:700;color:var(--gold);}
+  .home-byline{margin-top:24px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);padding-top:22px;}
+  .home-byline strong{color:var(--white);}
+
+  .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+    padding:13px 22px;background:rgba(8,12,23,0.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);}
+  .back{background:none;border:none;color:var(--gold);font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;}
+  .track-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;}
+
+  .hero{min-height:88svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:60px 24px 50px;
+    background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,95,196,0.2) 0%, transparent 70%),linear-gradient(180deg,#0a0f1e 0%,#060910 100%);}
+  .hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;}
+  .hero h1{font-size:clamp(30px,9vw,54px);font-weight:800;line-height:1.08;letter-spacing:-0.5px;margin-bottom:20px;max-width:600px;}
+  .hero h1 em{font-style:normal;color:var(--gold-lt);}
+  .hero-sub{font-size:clamp(12px,3vw,15px);color:var(--muted);max-width:420px;margin-bottom:44px;text-transform:uppercase;letter-spacing:2px;line-height:1.8;}
+  .hero-byline{font-size:13px;color:var(--muted);border-top:1px solid var(--border);padding-top:22px;width:100%;max-width:380px;}
+  .hero-byline strong{color:var(--white);}
+
+  section{padding:60px 24px;max-width:680px;margin:0 auto;}
+  .section-label{font-size:10px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+  section h2{font-size:clamp(22px,6vw,32px);font-weight:800;line-height:1.14;margin-bottom:18px;letter-spacing:-0.3px;}
+  section p{font-size:clamp(15px,2.4vw,16px);color:rgba(238,242,255,0.76);margin-bottom:16px;line-height:1.78;}
+  section p strong{color:var(--white);}
+  .divider{height:1px;background:var(--border);max-width:680px;margin:0 auto;}
+
+  .stat-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:30px;}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 20px;}
+  .stat-number{font-size:clamp(28px,8vw,42px);font-weight:800;color:var(--gold-lt);line-height:1;margin-bottom:10px;letter-spacing:-1px;}
+  .stat-label{font-size:14px;color:var(--muted);line-height:1.5;}
+  .stat-label strong{color:var(--white);display:block;margin-bottom:2px;}
+
+  .callout{background:linear-gradient(135deg,rgba(26,95,196,0.14),rgba(26,95,196,0.04));border:1px solid rgba(26,95,196,0.3);border-radius:14px;padding:24px 22px;margin:26px 0;}
+  .callout p{font-size:clamp(15px,2.5vw,17px);font-weight:500;color:var(--white);margin:0;line-height:1.7;}
+  .callout.gold{background:linear-gradient(135deg,rgba(201,168,76,0.14),rgba(201,168,76,0.03));border-color:rgba(201,168,76,0.35);}
+
+  .compare-wrap{margin-top:30px;border-radius:14px;overflow:hidden;border:1px solid var(--border);}
+  .compare-header{display:grid;grid-template-columns:1fr 1fr;}
+  .compare-col-head{padding:13px 14px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
+  .compare-col-head.left{background:rgba(201,168,76,0.16);color:var(--gold);}
+  .compare-col-head.right{background:rgba(26,95,196,0.2);color:var(--blue-mid);text-align:left;}
+  .compare-row{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border);}
+  .compare-cell{padding:13px 14px;font-size:13px;line-height:1.45;}
+  .compare-cell.left{background:rgba(255,255,255,0.02);color:var(--white);font-weight:600;}
+  .compare-cell.right{background:rgba(26,95,196,0.06);color:var(--white);font-weight:600;}
+
+  .success-grid{display:flex;flex-direction:column;gap:14px;margin-top:26px;}
+  .success-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;border-left:3px solid var(--gold);}
+  .success-headline{font-size:clamp(16px,4vw,19px);font-weight:800;color:var(--white);line-height:1.2;margin-bottom:6px;}
+  .success-headline .hl{color:var(--gold-lt);}
+  .success-context{font-size:13px;color:var(--muted);line-height:1.55;}
+
+  .move-grid{display:flex;flex-direction:column;gap:14px;margin-top:26px;}
+  .move-card{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:20px 18px;display:flex;gap:16px;align-items:flex-start;}
+  .move-n{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;background:var(--card);border:1px solid var(--border);color:var(--gold);}
+  .move-t{font-size:17px;font-weight:800;color:var(--white);margin-bottom:4px;}
+  .move-t span{color:var(--blue-mid);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-left:6px;}
+  .move-d{font-size:13.5px;color:var(--muted);line-height:1.55;}
+
+  .speclist{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:11px;}
+  .speclist li{font-size:15px;color:rgba(238,242,255,0.82);padding-left:22px;position:relative;line-height:1.5;}
+  .speclist li::before{content:'';position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--gold);}
+  .price{font-size:clamp(26px,7vw,38px);font-weight:800;color:var(--gold-lt);margin-top:22px;letter-spacing:-1px;}
+  .note{font-size:13px;color:var(--muted);margin-top:10px;font-style:italic;line-height:1.5;}
+
+  .pathway-grid{display:flex;flex-direction:column;margin-top:30px;position:relative;}
+  .pathway-grid::before{content:'';position:absolute;left:27px;top:44px;bottom:44px;width:2px;background:linear-gradient(to bottom,var(--gold),var(--blue));}
+  .pathway-step{display:flex;gap:20px;align-items:flex-start;padding:18px 0;position:relative;}
+  .step-num{width:56px;height:56px;border-radius:50%;background:var(--card);border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--muted);flex-shrink:0;z-index:1;}
+  .step-num.current{background:var(--gold);border-color:var(--gold);color:var(--navy);box-shadow:0 0 20px var(--glow-gold);}
+  .step-body{padding-top:10px;flex:1;}
+  .step-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:4px;}
+  .step-title{font-size:16px;font-weight:700;color:var(--white);margin-bottom:5px;}
+  .step-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+  .you-are-here{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-top:7px;}
+
+  .case-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 22px;margin-top:24px;}
+  .case-name{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+  .case-title{font-size:clamp(17px,4.5vw,22px);font-weight:800;color:var(--white);margin-bottom:14px;line-height:1.2;}
+  .case-body{font-size:14px;color:rgba(238,242,255,0.72);line-height:1.75;margin-bottom:8px;}
+  .quote-block{border-left:3px solid var(--gold);padding:14px 18px;margin-top:18px;background:rgba(201,168,76,0.05);border-radius:0 10px 10px 0;}
+  .quote-block p{font-size:15px;font-style:italic;color:var(--white);margin:0;line-height:1.65;}
+  .quote-block cite{display:block;margin-top:8px;font-size:12px;color:var(--gold);font-style:normal;font-weight:600;}
+
+  .about-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:38px 24px;text-align:center;margin-top:8px;}
+  .about-name{font-size:clamp(20px,5vw,26px);font-weight:800;color:var(--white);margin-bottom:4px;}
+  .about-title{font-size:12px;color:var(--gold);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;}
+  .about-bio{font-size:15px;color:rgba(238,242,255,0.74);line-height:1.78;margin-bottom:28px;}
+  .contact-links{display:flex;flex-direction:column;gap:12px;align-items:center;}
+  .contact-link{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--white);text-decoration:none;font-size:15px;font-weight:500;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:50px;padding:14px 26px;width:100%;max-width:320px;}
+  .contact-link.primary{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:700;}
+  .switch-row{text-align:center;padding:8px 24px 56px;}
+  .switch-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:50px;padding:12px 24px;font-size:13px;font-weight:700;cursor:pointer;}
+  footer{text-align:center;padding:26px 24px 44px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);}
+  footer a{color:var(--gold);text-decoration:none;}
+  .vsp-sub{font-size:clamp(15px,2.6vw,17px);color:var(--muted);font-weight:600;margin-top:6px;}
+  .vsp-seq{background:var(--card2);border:1px solid var(--border);border-radius:18px;padding:24px 22px;text-align:center;margin-top:24px;}
+  .vsp-seq .seq-h{font-weight:800;color:var(--gold-lt);font-size:15px;margin-bottom:10px;}
+  .vsp-seq .seq-body{color:var(--white);font-size:15px;line-height:1.8;font-weight:700;}
+  .vsp-why{margin-top:22px;font-size:15px;color:rgba(238,242,255,0.8);line-height:1.7;}
+  .vsp-why strong{color:var(--gold);}
+  .vsp-grid{display:grid;grid-template-columns:1fr;gap:24px;margin-top:28px;}
+  .vsp-col h4{font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--white);line-height:1.35;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  .vsp-stat{display:flex;gap:12px;align-items:baseline;margin-bottom:11px;}
+  .vsp-stat .v{color:var(--gold-lt);font-weight:800;font-size:18px;flex:none;min-width:46px;}
+  .vsp-stat .l{color:rgba(238,242,255,0.8);font-size:13px;line-height:1.45;}
+  .success-item{transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;}
+  .success-item:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,0.4);border-color:rgba(201,168,76,0.4);}
+  .stat-card{transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;}
+  .stat-card:hover{transform:translateY(-3px);box-shadow:0 0 30px var(--glow-gold);border-color:rgba(201,168,76,0.45);}
+  .move-card{transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;}
+  .move-card:hover{transform:translateX(5px);box-shadow:0 10px 26px rgba(0,0,0,0.4);border-color:rgba(201,168,76,0.4);}
+  .case-card{transition:transform .16s ease, box-shadow .16s ease;}
+  .case-card:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(0,0,0,0.45);}
+  .vsp-col{transition:transform .16s ease;}
+  .vsp-col:hover{transform:translateY(-4px);}
+  .vsp-stat{transition:transform .12s ease;}
+  .vsp-stat:hover{transform:translateX(4px);}
+  .compare-row{transition:background .16s ease;}
+  .compare-row:hover .compare-cell{background:rgba(201,168,76,0.1);}
+  .vsp-seq{transition:box-shadow .2s ease, transform .2s ease;}
+  .vsp-seq:hover{box-shadow:0 0 32px var(--glow-gold);transform:translateY(-2px);}
+  .callout{transition:transform .16s ease, box-shadow .16s ease;}
+  .callout:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,0.35);}
+  .speclist li{transition:color .14s ease, transform .14s ease;}
+  .speclist li:hover{color:var(--white);transform:translateX(4px);}
+  .contact-link{transition:transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;}
+  .contact-link:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.35);border-color:rgba(201,168,76,0.5);}
+  @media (min-width:560px){.vsp-grid{grid-template-columns:repeat(3,1fr);}}
+  @media (min-width:480px){.stat-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const app=document.getElementById("app");
+const sign = `<p class="hero-byline"><strong>Christina Powell</strong> · Mental Resilience Strategist · greyareatraining.com</p>`;
+
+function home(){
+  app.innerHTML=`
+    <div class="home">
+      <div class="home-eyebrow">Grey Area Strategy × Chicago Fire FC</div>
+      <h1>Train the Moments Between <em>Thought and Action</em>.</h1>
+      <div class="home-sub">Prepared for Darcy Norman, Director of Performance. Two pilots. Pick the track you want to see.</div>
+      <div class="choose">Choose a pilot</div>
+      <button class="path" onclick="openDeck('gk')">
+        <div class="path-num">Track 01</div>
+        <h3>Goalkeeping Pilot</h3>
+        <p>Most athletes drill skills until they break. VSP stops it before it does. Visualization Sequencing Protocol plus pressure-recovery training.</p>
+        <div class="go">View this track ›</div>
+      </button>
+      <button class="path" onclick="openDeck('coach')">
+        <div class="path-num">Track 02</div>
+        <h3>Coach Development</h3>
+        <p>Staff responsible for elite performance are expected to recover from pressure without ever being taught how.</p>
+        <div class="go">View this track ›</div>
+      </button>
+      <div class="home-byline"><strong>Christina Powell</strong> · Mental Resilience Strategist · greyareatraining.com</div>
+    </div>`;
+  window.scrollTo(0,0);
+}
+
+function renderGK(){
+  app.innerHTML=`
+    <div class="topbar">
+      <button class="back" onclick="home()">‹ Paths</button>
+      <span class="track-tag">Goalkeeping Pilot</span>
+    </div>
+
+    <div class="hero">
+      <p class="hero-eyebrow">Grey Area Strategy × Chicago Fire FC</p>
+      <h1>Mistakes Are Inevitable. <em>Recovery</em> Is the Advantage.</h1>
+      <p class="hero-sub">Mental Pressure-Recovery Training · Goalkeeping Pilot</p>
+      ${sign}
+    </div>
+
+    <section>
+      <p class="section-label">The Reality</p>
+      <h2>Every Player Makes Mistakes. <span style="color:var(--gold-lt)">Not Every Position Pays the Same Price.</span></h2>
+      <p><strong>The status quo:</strong> Goalkeepers are extensively developed technically, tactically, and physically to prevent errors.</p>
+      <p><strong>The gap:</strong> Goalkeepers operate in soccer's highest cost-per-mistake position, yet the speed at which they recover and reset after highly consequential moments is rarely trained with the same intent as technical and physical performance.</p>
+      <div class="callout gold"><p>The advantage doesn't belong to the goalkeeper who never makes mistakes. <span style="color:var(--gold-lt)">It Belongs to the Goalkeeper Who Recovers Faster Than Their Competitors.</span></p></div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">How It Works</p>
+      <h2>Mistakes Aren't Failures. They're Reps to Build Resilience Like a Muscle.</h2>
+      <div class="move-grid">
+        <div class="move-card"><div class="move-n">1</div><div><div class="move-t">Build it.<span>Pre-season</span></div><div class="move-d">Build the baseline in a calm, controlled environment. Make the skill automatic.</div></div></div>
+        <div class="move-card mid"><div class="move-n">2</div><div><div class="move-t">Break it.<span>In-season</span></div><div class="move-d">Introduce unpredictable disruptions &amp; variables until they break, then train the reset through the exact moment it falls apart.</div></div></div>
+        <div class="move-card"><div class="move-n">3</div><div><div class="move-t">Prove it.<span>Matchday</span></div><div class="move-d">Measure recovery speed against the baseline on matchday. Tweak the strategy and tools until recovery holds. This is the guarantee.</div></div></div>
+      </div>
+      <div class="callout"><p>The ecosystem is the most important aspect: this framework operates <span style="color:var(--gold-lt)">alongside and in collaboration</span> with your sports psychologists, coaches, and support staff, delivering a dynamic strategy that constantly evolves based on match outputs and real-time inputs.</p></div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">The Protocol in the Pilot</p>
+      <h2>Visualization Sequencing Protocol</h2>
+      <p class="vsp-sub">Three independent athletes. Same protocol. Same 6-week timeframe. Consistent direction.</p>
+      <div class="vsp-seq">
+        <div class="seq-h">The Sequence</div>
+        <div class="seq-body">Visualize → Walk-through → Attempt → Cap attempts until consistency → Then increase</div>
+      </div>
+      <p class="vsp-why"><strong>Why it works:</strong> It stops athletes from drilling bad patterns into muscle memory. It rebuilds motor pathways through controlled, high-quality repetitions rather than high-volume degradation. It is the core of the goalkeeping pilot.</p>
+      <div class="vsp-grid">
+        <div class="vsp-col">
+          <h4>Athlete 1: Anxiety &amp; Confidence</h4>
+          <div class="vsp-stat"><span class="v">+32%</span><span class="l">Jump landings</span></div>
+          <div class="vsp-stat"><span class="v">+10%</span><span class="l">Skating speed</span></div>
+          <div class="vsp-stat"><span class="v">-55%</span><span class="l">Jump pops</span></div>
+          <div class="vsp-stat"><span class="v">-24%</span><span class="l">Anxiety and fear</span></div>
+        </div>
+        <div class="vsp-col">
+          <h4>Athlete 2: Developmental Coordination Disorder (Lost Jumps)</h4>
+          <div class="vsp-stat"><span class="v">+85%</span><span class="l">Jump landings</span></div>
+          <div class="vsp-stat"><span class="v">-37%</span><span class="l">Jump pops</span></div>
+          <div class="vsp-stat"><span class="v">100%</span><span class="l">Jumps regained</span></div>
+          <div class="vsp-stat"><span class="v">1st</span><span class="l">Podium 2 weeks later &amp; landed <em style="color:var(--gold-lt)">new</em> jump using same protocol</span></div>
+        </div>
+        <div class="vsp-col">
+          <h4>Athlete 3: Session-Level Protocol Effect</h4>
+          <div class="vsp-stat"><span class="v">+78%</span><span class="l">Landing rate on visualization days, vs +47% on non-visualization days</span></div>
+          <div class="vsp-stat"><span class="v">-42%</span><span class="l">Jump pops on visualization days</span></div>
+        </div>
+      </div>
+      <div class="callout gold"><p>Goalkeeping results are held under client NDA, so they are not shown here. The protocol has been proven 1:1 with pro goalkeepers. This pilot is how it scales to a unit.</p></div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">The Systems</p>
+      <h2>Two Systems. One Objective.</h2>
+      <p>Technical training reduces the frequency of mistakes. Pressure-recovery training reduces the duration of mistakes.</p>
+      <div class="compare-wrap">
+        <div class="compare-header">
+          <div class="compare-col-head left">Visualization Sequencing Protocol</div>
+          <div class="compare-col-head right">Mental Pressure-Recovery</div>
+        </div>
+        <div class="compare-row"><div class="compare-cell left">Build and protect technical execution</div><div class="compare-cell right">Restore execution after disruption</div></div>
+        <div class="compare-row"><div class="compare-cell left">Reduce degraded reps</div><div class="compare-cell right">Re-anchor attention</div></div>
+        <div class="compare-row"><div class="compare-cell left">Accelerate skill acquisition</div><div class="compare-cell right">Dynamic decision-making</div></div>
+        <div class="compare-row"><div class="compare-cell left">Reinforce motor patterns</div><div class="compare-cell right">Switch attentional focus</div></div>
+        <div class="compare-row"><div class="compare-cell left">Better execution under pressure</div><div class="compare-cell right">Faster mental reset and recovery</div></div>
+      </div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">Client Success</p>
+      <h2>Performance Gains You Can Measure</h2>
+      <div class="success-grid">
+        <div class="success-item"><div class="success-headline"><span class="hl">Olympic Gold</span>, Team GB's first Snowsport Gold in 102 years</div><div class="success-context">Huw Nightingale · <a href="https://nightingale.greyareatraining.com" target="_blank" style="color:var(--gold-lt)">Full data results over two seasons</a> (password: huw)</div></div>
+        <div class="success-item"><div class="success-headline"><span class="hl">2nd Olympic Quota spot</span> for Team GB Ice Dance since 2010</div><div class="success-context">Phebe Bekker and James Hernandez</div></div>
+        <div class="success-item"><div class="success-headline"><span class="hl">4x</span> increase in Top-5 finishes</div><div class="success-context">Rose Savard-Ferguson · SBX Nor-Am Silver Medalist · <a href="https://savage.greyareatraining.com/" target="_blank" style="color:var(--gold-lt)">Full data results</a> (password: rose)</div></div>
+        <div class="success-item"><div class="success-headline"><span class="hl">+221%</span> increase in Top-20 qualifications</div></div>
+        <div class="success-item"><div class="success-headline"><span class="hl">Top 10</span> at 2025 World Snowboard Championships</div></div>
+        <div class="success-item"><div class="success-headline"><span class="hl">81%</span> decrease in average DNQ rate</div></div>
+      </div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">The Pilot</p>
+      <h2>Recover Faster Than Your Competitors.</h2>
+      <ul class="speclist">
+        <li>Up to 8 keepers</li>
+        <li>1 GK coach</li>
+        <li>1 support staff member</li>
+        <li>12-week in-season block</li>
+        <li>Weekly group athlete session</li>
+        <li>Weekly coach session</li>
+      </ul>
+      <div class="price">Starting at $23,000+</div>
+      <div class="callout gold"><p><strong style="color:var(--gold-lt)">The guarantee.</strong> If recovery speed against the Stage 1 baseline has not improved by at least 10% by the end of the block, you get an extra 4 weeks at no additional cost.</p></div>
+      <p class="note">The IP stays with me. The infrastructure stays with you.</p>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">Start Here</p>
+      <h2>The Half-Day Diagnostic</h2>
+      <p>Before committing to the pilot, establish the baseline.</p>
+      <ul class="speclist">
+        <li>Pressure-response observations</li>
+        <li>Goalkeeper-specific recommendations</li>
+        <li>A roadmap for the 12-week block</li>
+      </ul>
+      <div class="price">$5,000</div>
+      <p class="note">No obligation. If the data doesn't warrant further investment, we stop there.</p>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">The Ask</p>
+      <div class="about-card">
+        <div class="about-name">Christina Powell</div>
+        <div class="about-title">Mental Resilience Strategist</div>
+        <div class="about-bio">I built this methodology because I had to. ADD. Athlete. Raised in chaos. I learned to perform under disruption because the alternative was not performing at all.</div>
+        <div class="contact-links">
+          <a class="contact-link primary" href="mailto:cpowell@greyareatraining.com">cpowell@greyareatraining.com</a>
+          <a class="contact-link" href="https://wa.me/13166509856" target="_blank">WhatsApp: +1 316 650 9856</a>
+          <a class="contact-link" href="https://greyareatraining.com" target="_blank">greyareatraining.com</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="switch-row"><button class="switch-btn" onclick="home()">‹ See the other track</button></div>
+    <footer>Grey Area Strategy · <a href="https://greyareatraining.com">greyareatraining.com</a></footer>`;
+  window.scrollTo(0,0);
+}
+
+function renderCoach(){
+  app.innerHTML=`
+    <div class="topbar">
+      <button class="back" onclick="home()">‹ Paths</button>
+      <span class="track-tag">Coach Development</span>
+    </div>
+
+    <div class="hero">
+      <p class="hero-eyebrow">Grey Area Strategy × Chicago Fire FC</p>
+      <h1>The Invisible <em>Liability</em> in Football</h1>
+      <p style="font-size:clamp(16px,3.6vw,20px);color:var(--white);font-weight:600;max-width:480px;margin-bottom:22px;line-height:1.45;">Players get the interventions. Staff absorbs the consequences.</p>
+      <p class="hero-sub">Mental Pressure-Recovery Training for Elite Coaching Staff</p>
+      ${sign}
+    </div>
+
+    <section>
+      <p class="section-label">The Reality</p>
+      <h2>Football Clubs Relentlessly Develop Their Players. <span style="color:var(--gold-lt)">Almost No One Develops the Staff That Manages Them.</span></h2>
+      <p><strong>The Status Quo:</strong> Coaches and staff are expected to absorb pressure and operate under constant duress without a recovery framework.</p>
+      <p><strong>The Gap:</strong> High-level talent lacks a standardized, scalable infrastructure for execution when the environment turns volatile.</p>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-number">75%</div><div class="stat-label"><strong>Of coaches</strong> across 65 leagues are replaced within a year</div></div>
+      </div>
+      <div class="callout" style="margin-top:28px"><p>The problem is rarely talent. It's an exceptionally expensive failure of infrastructure.</p></div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">How It Works</p>
+      <h2>Mistakes Aren't Failures. They're Reps to Build Resilience Like a Muscle.</h2>
+      <div class="move-grid">
+        <div class="move-card"><div class="move-n">1</div><div><div class="move-t">Build it.<span>Pre-season</span></div><div class="move-d">Build the baseline in a calm, controlled environment. Make the skill automatic.</div></div></div>
+        <div class="move-card mid"><div class="move-n">2</div><div><div class="move-t">Break it.<span>In-season</span></div><div class="move-d">Introduce unpredictable disruptions &amp; variables until they break, then train the reset through the exact moment it falls apart.</div></div></div>
+        <div class="move-card"><div class="move-n">3</div><div><div class="move-t">Prove it.<span>Matchday</span></div><div class="move-d">Measure recovery speed against the baseline on matchday. Tweak the strategy and tools until recovery holds. This is the guarantee.</div></div></div>
+      </div>
+      <div class="callout"><p>The ecosystem is the most important aspect: this framework operates <span style="color:var(--gold-lt)">alongside and in collaboration</span> with your sports psychologists, coaches, and support staff, delivering a dynamic strategy that constantly evolves based on match outputs and real-time inputs.</p></div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">The Performance Gap</p>
+      <h2>The 48 Hours Nobody Trains For</h2>
+      <div class="quote-block"><p>"We've earned the right to have this pressure."</p><cite>Gregg Berhalter</cite></div>
+      <p style="margin-top:22px">Every staff knows the 48 hours after a loss.</p>
+      <p>The tape is cut, the board is watching every move, the next session needs to be built, and decisions are being made long before emotions have settled.</p>
+      <p>The speed at which a staff returns to clear execution shapes everything that follows.</p>
+      <div class="success-grid" style="margin-top:24px">
+        <div class="success-item"><div class="success-headline">The 'Calm' Fallacy</div><div class="success-context">Most mental performance is built in calm. What is built in calm tends to disappear in chaos.</div></div>
+        <div class="success-item"><div class="success-headline">Physiological Spikes</div><div class="success-context">When pressure peaks, execution drops. We don't train the plan, we train for when the plan breaks.</div></div>
+        <div class="success-item"><div class="success-headline">The Bridge</div><div class="success-context">We close the gap between elite talent and volatile environments with a standardized, scalable framework for execution.</div></div>
+      </div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">The Performance Training Gap</p>
+      <h2>Pressure-Recovery Training</h2>
+      <p>What clubs invest in, and what's missing.</p>
+      <div class="compare-wrap">
+        <div class="compare-header">
+          <div class="compare-col-head left">What Clubs Invest In</div>
+          <div class="compare-col-head right">What I Provide</div>
+        </div>
+        <div class="compare-row"><div class="compare-cell left">Player Mental Performance</div><div class="compare-cell right">Pressure Response Preparation</div></div>
+        <div class="compare-row"><div class="compare-cell left">Tactical Preparation</div><div class="compare-cell right">Mental Recovery Speed</div></div>
+        <div class="compare-row"><div class="compare-cell left">Individual Player Psychology</div><div class="compare-cell right">Attentional Re-Anchoring</div></div>
+        <div class="compare-row"><div class="compare-cell left">Sports Science for the Body</div><div class="compare-cell right">Adaptive Decision-Making</div></div>
+        <div class="compare-row"><div class="compare-cell left">Data on Player Readiness</div><div class="compare-cell right">Unit Cohesion &amp; Stress-Absorption</div></div>
+      </div>
+      <div class="callout" style="margin-top:28px"><p>"Most do not fail from a lack of preparation. They fail in the Grey Area, the split second between knowing what to do and doing it under pressure."</p></div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">Client Success</p>
+      <h2>Performance Gains You Can Measure</h2>
+      <div class="success-grid">
+        <div class="success-item"><div class="success-headline"><span class="hl">Olympic Gold</span>, Team GB's first Snowsport Gold in 102 years</div><div class="success-context">Huw Nightingale · <a href="https://nightingale.greyareatraining.com" target="_blank" style="color:var(--gold-lt)">Full data results over two seasons</a> (password: huw)</div></div>
+        <div class="success-item"><div class="success-headline"><span class="hl">2nd Olympic Quota spot</span> for Team GB Ice Dance since 2010</div><div class="success-context">Phebe Bekker and James Hernandez</div></div>
+        <div class="success-item"><div class="success-headline"><span class="hl">4x</span> increase in Top-5 finishes</div><div class="success-context">Rose Savard-Ferguson · SBX Nor-Am Silver Medalist · <a href="https://savage.greyareatraining.com/" target="_blank" style="color:var(--gold-lt)">Full data results</a> (password: rose)</div></div>
+        <div class="success-item"><div class="success-headline"><span class="hl">+221%</span> increase in Top-20 qualifications</div></div>
+        <div class="success-item"><div class="success-headline"><span class="hl">Top 10</span> at 2025 World Snowboard Championships</div></div>
+        <div class="success-item"><div class="success-headline"><span class="hl">81%</span> decrease in average DNQ rate</div></div>
+      </div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">The Pilot</p>
+      <h2>The Match Ends. The Work Doesn't.</h2>
+      <ul class="speclist">
+        <li>Coaching and support staff</li>
+        <li>Performance and medical staff integration</li>
+        <li>Monthly or Season Retainer</li>
+        <li>Weekly staff sessions</li>
+        <li>Post-match recovery and review processes</li>
+        <li>Communication under pressure</li>
+        <li>Performance department alignment</li>
+      </ul>
+      <div style="font-size:clamp(19px,4.4vw,24px);font-weight:800;color:var(--gold-lt);margin-top:22px;line-height:1.25;letter-spacing:-0.3px;">Custom scope based on club needs.</div>
+    </section>
+    <div class="divider"></div>
+
+    <section>
+      <p class="section-label">The Ask</p>
+      <div class="about-card">
+        <div class="about-name">Christina Powell</div>
+        <div class="about-title">Mental Resilience Strategist</div>
+        <div class="about-bio">I built this methodology because I had to. ADD. Athlete. Raised in chaos. I learned to perform under disruption because the alternative was not performing at all.</div>
+        <div class="contact-links">
+          <a class="contact-link primary" href="mailto:cpowell@greyareatraining.com">cpowell@greyareatraining.com</a>
+          <a class="contact-link" href="https://wa.me/13166509856" target="_blank">WhatsApp: +1 316 650 9856</a>
+          <a class="contact-link" href="https://greyareatraining.com" target="_blank">greyareatraining.com</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="switch-row"><button class="switch-btn" onclick="home()">‹ See the other track</button></div>
+    <footer>Grey Area Strategy · <a href="https://greyareatraining.com">greyareatraining.com</a></footer>`;
+  window.scrollTo(0,0);
+}
+
+function openDeck(k){
+  if(k==="gk"){ renderGK(); return; }
+  if(k==="coach"){ renderCoach(); return; }
+}
+
+home();
+</script>
+</body>
+</html>
